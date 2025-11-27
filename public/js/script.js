@@ -1,28 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Στοιχεία DOM
     const form = document.getElementById('expenseForm');
     const tableBody = document.getElementById('expenseTableBody');
     const totalAmountEl = document.getElementById('totalAmount');
     const lastExpenseEl = document.getElementById('lastExpense');
     const refreshBtn = document.getElementById('refreshBtn');
 
-    // Formatter για Ευρώ (Επαγγελματικό Format)
     const currencyFormatter = new Intl.NumberFormat('el-GR', {
         style: 'currency',
         currency: 'EUR',
         minimumFractionDigits: 2
     });
 
-    // Formatter για Ημερομηνίες
     const dateFormatter = new Intl.DateTimeFormat('el-GR', {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit'
     });
 
-    // 1. Φόρτωση Δεδομένων
     async function fetchExpenses() {
         try {
-            // Δείξε ότι φορτώνει (UX)
             refreshBtn.innerHTML = '<span class="material-symbols-outlined">sync</span> Φόρτωση...';
             
             const res = await fetch('/expenses');
@@ -41,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. Εμφάνιση Πίνακα (Με κουμπί διαγραφής)
     function renderTable(expenses) {
         tableBody.innerHTML = '';
         
@@ -69,17 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.appendChild(row);
         });
 
-        // Προσθήκη λειτουργίας στα κουμπιά διαγραφής
         document.querySelectorAll('.btn-delete').forEach(button => {
             button.addEventListener('click', (e) => {
-                // Βρίσκουμε το ID από το κουμπί που πατήθηκε
                 const id = e.currentTarget.getAttribute('data-id');
                 deleteExpense(id);
             });
         });
     }
 
-    // ΝΕΑ ΣΥΝΑΡΤΗΣΗ: Διαγραφή Εξόδου
     async function deleteExpense(id) {
         if(!confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτό το έξοδο;')) return;
 
@@ -87,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch(`/expenses/${id}`, { method: 'DELETE' });
             
             if (res.ok) {
-                fetchExpenses(); // Ξαναφορτώνουμε τη λίστα για να φύγει η γραμμή
+                fetchExpenses();
             } else {
                 alert('Αποτυχία διαγραφής');
             }
@@ -97,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 3. Εμφάνιση Στατιστικών
     function renderStats(expenses) {
         const total = expenses.reduce((sum, item) => sum + item.amount, 0);
         
@@ -110,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 4. Υποβολή Φόρμας
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -141,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             form.reset();
-            fetchExpenses(); // Ανανέωση λίστας
+            fetchExpenses();
 
         } catch (error) {
             console.error(error);
@@ -152,9 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Events
     refreshBtn.addEventListener('click', fetchExpenses);
 
-    // Εκκίνηση
     fetchExpenses();
 });
