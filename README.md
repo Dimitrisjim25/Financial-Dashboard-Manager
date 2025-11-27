@@ -17,4 +17,5 @@ Simple expense management application with Full CRUD functionality.
 
 To run, clone the repository, run `npm install`, and configure the `.env` file.
 
-<img width="1919" height="909" alt="image" src="https://github.com/user-attachments/assets/28e5148a-5e41-4168-b8d8-4267b1513cd2" />
+<img width="1919" height="905" alt="image" src="https://github.com/user-attachments/assets/d997b506-1601-404f-bab7-346c74d1ce90" />
+
