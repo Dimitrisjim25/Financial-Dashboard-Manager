@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="material-symbols-outlined icon-logo">account_balance_wallet</span>
+            <h2>Expense<span class="highlight">Manager</span></h2>
+        </div>
+        
+        <nav class="menu">
+            <a href="#" class="menu-item active">
+                <span class="material-symbols-outlined">grid_view</span>
+                <span>Επισκόπηση</span>
+            </a>
+            <a href="#" class="menu-item">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span>Συναλλαγές</span>
+            </a>
+            <a href="#" class="menu-item">
+                <span class="material-symbols-outlined">analytics</span>
+                <span>Αναφορές</span>
+            </a>
+            <div class="divider"></div>
+            <a href="#" class="menu-item">
+                <span class="material-symbols-outlined">settings</span>
+                <span>Ρυθμίσεις</span>
+            </a>
+        </nav>
+
+        <div class="user-info">
+            <div class="avatar">D</div>
+            <div class="details">
+                <span class="name">Dimitrios User</span>
+                <span class="role">Administrator</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="dashboard">
+        <header class="top-bar">
+            <div class="title-section">
+                <h1>Dashboard</h1>
+                <p class="subtitle">Διαχείριση οικονομικών και εξόδων</p>
+            </div>
+            <button id="refreshBtn" class="btn btn-secondary">
+                <span class="material-symbols-outlined">refresh</span>
+                Ανανέωση
+            </button>
+        </header>
+
+        <section class="kpi-grid">
+            <div class="card kpi-card">
+                <div class="kpi-header">
+                    <span>Συνολικά Έξοδα</span>
+                    <span class="material-symbols-outlined icon-kpi">payments</span>
+                </div>
+                <div class="kpi-value" id="totalAmount">0,00 €</div>
+                <div class="kpi-trend negative">
+                    <span class="material-symbols-outlined">trending_down</span>
+                    <span>Εξοδα τρέχοντος μήνα</span>
+                </div>
+            </div>
+
+            <div class="card kpi-card">
+                <div class="kpi-header">
+                    <span>Τελευταία Δραστηριότητα</span>
+                    <span class="material-symbols-outlined icon-kpi">history</span>
+                </div>
+                <div class="kpi-value small" id="lastExpense">-</div>
+                <div class="kpi-trend neutral">
+                    <span>Πιο πρόσφατη καταχώρηση</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="modules-grid">
+            
+            <div class="card form-module">
+                <div class="card-header">
+                    <h3>Νέα Συναλλαγή</h3>
+                </div>
+                <form id="expenseForm">
+                    <div class="input-group">
+                        <label for="desc">Περιγραφή</label>
+                        <input type="text" id="desc" placeholder="π.χ. Καφές, Ενοίκιο, Σούπερ Μάρκετ" required autocomplete="off">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="amount">Ποσό (€)</label>
+                        <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined">add</span>
+                        Καταχώρηση
+                    </button>
+                </form>
+            </div>
+
+            <div class="card table-module">
+                <div class="card-header">
+                    <h3>Ιστορικό Συναλλαγών</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ημερομηνία</th>
+                                <th>Περιγραφή</th>
+                                <th class="text-right">Ποσό</th>
+                                <th style="width: 50px;"></th> 
+                            </tr>
+                        </thead>
+                        <tbody id="expenseTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
