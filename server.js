@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const { Sequelize, DataTypes } = require('sequelize');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
