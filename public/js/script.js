@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastExpenseEl = document.getElementById('lastExpense');
     const refreshBtn = document.getElementById('refreshBtn');
 
+    // Παίρνουμε το Token από το localStorage
+    const token = localStorage.getItem('token');
+
+    // Αν δεν υπάρχει token, τον διώχνουμε (για σιγουριά)
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+
     const currencyFormatter = new Intl.NumberFormat('el-GR', {
         style: 'currency',
         currency: 'EUR',
@@ -16,11 +24,26 @@ document.addEventListener('DOMContentLoaded', () => {
         hour: '2-digit', minute: '2-digit'
     });
 
+    // --- 1. GET Request (Φόρτωση) ---
     async function fetchExpenses() {
         try {
             refreshBtn.innerHTML = '<span class="material-symbols-outlined">sync</span> Φόρτωση...';
             
-            const res = await fetch('/expenses');
+            // ΠΡΟΣΘΗΚΗ: Headers με Authorization
+            const res = await fetch('/expenses', {
+                method: 'GET',
+                headers: {
+                    'Authorization': token 
+                }
+            });
+
+            // ΠΡΟΣΘΗΚΗ: Έλεγχος αν έληξε το session
+            if (res.status === 401 || res.status === 403) {
+                alert('Η συνεδρία έληξε. Παρακαλώ συνδεθείτε ξανά.');
+                window.location.href = 'login.html';
+                return;
+            }
+
             if (!res.ok) throw new Error('Αποτυχία φόρτωσης');
             
             const data = await res.json();
@@ -30,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error:', error);
-            alert('Σφάλμα σύνδεσης με τον διακομιστή.');
+            // alert('Σφάλμα σύνδεσης με τον διακομιστή.'); // Προαιρετικό, για να μην πετάγεται συνέχεια
         } finally {
             refreshBtn.innerHTML = '<span class="material-symbols-outlined">refresh</span> Ανανέωση';
         }
@@ -71,11 +94,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- 2. DELETE Request (Διαγραφή) ---
     async function deleteExpense(id) {
         if(!confirm('Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτό το έξοδο;')) return;
 
         try {
-            const res = await fetch(`/expenses/${id}`, { method: 'DELETE' });
+            // ΠΡΟΣΘΗΚΗ: Headers με Authorization
+            const res = await fetch(`/expenses/${id}`, { 
+                method: 'DELETE',
+                headers: {
+                    'Authorization': token
+                }
+            });
             
             if (res.ok) {
                 fetchExpenses();
@@ -89,7 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderStats(expenses) {
-        const total = expenses.reduce((sum, item) => sum + item.amount, 0);
+        // Χρησιμοποιούμε parseFloat για σιγουριά ότι προσθέτουμε αριθμούς
+        const total = expenses.reduce((sum, item) => sum + parseFloat(item.amount), 0);
         
         totalAmountEl.textContent = currencyFormatter.format(total);
 
@@ -100,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- 3. POST Request (Καταχώρηση) ---
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -116,9 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
             submitBtn.textContent = 'Αποθήκευση...';
 
+            // ΠΡΟΣΘΗΚΗ: Headers με Authorization
             const res = await fetch('/expenses', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': token  // <--- Εδώ είναι το κλειδί
+                },
                 body: JSON.stringify(payload)
             });
 
@@ -143,5 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     refreshBtn.addEventListener('click', fetchExpenses);
 
+    // Εκκίνηση
     fetchExpenses();
 });
