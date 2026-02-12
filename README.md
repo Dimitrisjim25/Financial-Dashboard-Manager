@@ -1,6 +1,6 @@
 # Expense Manager Dashboard
 
-Simple expense management application with Full CRUD functionality.
+A secure, full-stack financial management tool designed to track expenses and visualize transaction data in real-time. The application features user authentication, strict data isolation, and a responsive interface for seamless financial monitoring.
 
 ---
 
@@ -13,9 +13,4 @@ Simple expense management application with Full CRUD functionality.
 * **Security:** Basic security measures were applied (Helmet, Rate Limiting) and data validation.
 * **Note:** Developed in a **Linux (WSL)** environment.
 
-## Execution
-
-To run, clone the repository, run `npm install`, and configure the `.env` file.
-
 <img width="1919" height="905" alt="image" src="https://github.com/user-attachments/assets/d997b506-1601-404f-bab7-346c74d1ce90" />
-
