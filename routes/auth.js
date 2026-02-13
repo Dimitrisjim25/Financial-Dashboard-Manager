@@ -41,7 +41,7 @@ router.post('/login', async (req, res) => {
         if (!validPassword) return res.status(404).json({ error: "Λάθος email ή κωδικός" });
 
         // Δημιουργία Token
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret123', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.json({ token, username: user.username });
     } catch (e) {
